@@ -22,3 +22,13 @@ class SchemaCreator:
             );
         """
         )
+
+        self.db.execute(
+            "CREATE INDEX IF NOT EXISTS idx_students_room_id ON students(room_id);"
+        )
+        self.db.execute(
+            "CREATE INDEX IF NOT EXISTS idx_students_birthday ON students(birthday);"
+        )
+        self.db.execute(
+            "CREATE INDEX IF NOT EXISTS idx_students_sex ON students(sex);"
+        )
