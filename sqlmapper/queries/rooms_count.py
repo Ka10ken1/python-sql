@@ -8,10 +8,9 @@ class RoomsCountQuery(IQuery):
     def run(self):
         return self.db.fetchall(
             """
-            SELECT r.name AS room, COUNT(s.id) AS student_count
-            FROM rooms r
-            LEFT JOIN students s ON s.room_id = r.id
-            GROUP BY r.name
-            ORDER BY student_count DESC;
-        """
+                select r.id, count(s.id) as student_count
+                from rooms r
+                left join students s on r.id = s.room_id
+                group by r.id;
+            """
         )
