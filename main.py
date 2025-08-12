@@ -1,26 +1,14 @@
-from sqlmapper.data_loader import DataLoader
-from sqlmapper.db_config import PostgresDB
-from sqlmapper.queries.rooms_count import RoomsCountQuery
-from sqlmapper.queries.largest_age_diff import LargestAgeDifferenceQuery
-from sqlmapper.queries.smallest_avg_age import SmallestAverageAgeCountQuery
-from sqlmapper.queries.mixed_gender import MixedGenderRoomatesQuery
-from sqlmapper.repository import Repository
-from sqlmapper.schema_creator import SchemaCreator
+from repositories.data_loader import DataLoader
+from repositories.db_config import PostgresDB
+from queries.rooms_count import RoomsCountQuery
+from queries.largest_age_diff import LargestAgeDifferenceQuery
+from queries.smallest_avg_age import SmallestAverageAgeCountQuery
+from queries.mixed_gender import MixedGenderRoomatesQuery
+from repositories.schema_creator import SchemaCreator
+from repositories.room_repository import RoomRepository
+from repositories.student_repository import StudentRepository
 from dotenv import load_dotenv
-import json
-import decimal
 import os
-
-
-def decimal_default(obj):
-    if isinstance(obj, decimal.Decimal):
-        return float(obj)
-    raise TypeError
-
-
-def save_to_json(filename, data):
-    with open(filename, "w") as f:
-        json.dump(data, f, indent=4, default=decimal_default)
 
 
 def main():
@@ -40,22 +28,20 @@ def main():
     schema = SchemaCreator(db)
     schema.create_schema()
 
-    repo = Repository(db)
-    loader = DataLoader(repo)
+    room_repo = RoomRepository(db)
+    student_repo = StudentRepository(db)
+
+    loader = DataLoader(room_repo, student_repo)
     loader.load_data(
         "./tests/fixatures/rooms.json", "./tests/fixatures/students.json"
     )
 
-    save_to_json("output/room_counts.json", RoomsCountQuery(db).run())
-    save_to_json(
-        "output/smallest_avg_age.json", SmallestAverageAgeCountQuery(db).run()
-    )
-    save_to_json(
-        "output/largest_age_diff.json", LargestAgeDifferenceQuery(db).run()
-    )
-    save_to_json(
-        "output/mixed_gender_rooms.json", MixedGenderRoomatesQuery(db).run()
-    )
+    room_count = RoomsCountQuery(db).run()
+    smallest_avg_age = SmallestAverageAgeCountQuery(db).run()
+    largest_age_diff = LargestAgeDifferenceQuery(db).run()
+    mixed_gender = MixedGenderRoomatesQuery(db).run()
+
+    print(room_count, smallest_avg_age, largest_age_diff, mixed_gender)
 
 
 if __name__ == "__main__":

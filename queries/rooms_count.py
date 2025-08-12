@@ -1,7 +1,4 @@
-from sqlmapper.interfaces import IQuery
-
-
-class RoomsCountQuery(IQuery):
+class RoomsCountQuery:
     def __init__(self, db):
         self.db = db
 

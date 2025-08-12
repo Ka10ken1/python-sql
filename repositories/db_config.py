@@ -1,9 +1,8 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
-from .interfaces import IDatabase
 
 
-class PostgresDB(IDatabase):
+class PostgresDB:
     def __init__(self, dsn: str):
         self.dsn = dsn
         self.conn = None
@@ -22,3 +21,6 @@ class PostgresDB(IDatabase):
         with self.connect().cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute(query, params)
             return cur.fetchall()
+
+    def cursor(self):
+        return self.connect().cursor()

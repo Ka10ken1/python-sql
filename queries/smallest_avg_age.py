@@ -1,7 +1,4 @@
-from sqlmapper.interfaces import IQuery
-
-
-class SmallestAverageAgeCountQuery(IQuery):
+class SmallestAverageAgeCountQuery:
     def __init__(self, db):
         self.db = db
 
