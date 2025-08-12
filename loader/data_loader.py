@@ -2,13 +2,13 @@ import json
 from typing import List
 from entities.room import Room
 from entities.student import Student
-from repositories.room_repository import RoomRepository
-from repositories.student_repository import StudentRepository
+from db.room_data_access import RoomDataAccess
+from db.student_data_access import StudentDataAccess
 
 
 class DataLoader:
     def __init__(
-        self, room_repo: RoomRepository, student_repo: StudentRepository
+        self, room_repo: RoomDataAccess, student_repo: StudentDataAccess
     ):
         self.room_repo = room_repo
         self.student_repo = student_repo

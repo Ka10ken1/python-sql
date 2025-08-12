@@ -4,7 +4,7 @@ from psycopg2.extras import execute_values
 from entities.room import Room
 
 
-class RoomRepository:
+class RoomDataAccess:
     def __init__(self, db):
         self.db = db
 

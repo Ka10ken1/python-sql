@@ -3,7 +3,7 @@ from entities.student import Student
 from psycopg2.extras import execute_values
 
 
-class StudentRepository:
+class StudentDataAccess:
     def __init__(self, db):
         self.db = db
 

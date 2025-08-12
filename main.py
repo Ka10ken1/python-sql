@@ -1,12 +1,12 @@
-from repositories.data_loader import DataLoader
-from repositories.db_config import PostgresDB
+from db.student_data_access import StudentDataAccess
+from loader.data_loader import DataLoader
+from db.db_config import PostgresDB
 from queries.rooms_count import RoomsCountQuery
 from queries.largest_age_diff import LargestAgeDifferenceQuery
 from queries.smallest_avg_age import SmallestAverageAgeCountQuery
 from queries.mixed_gender import MixedGenderRoomatesQuery
-from repositories.schema_creator import SchemaCreator
-from repositories.room_repository import RoomRepository
-from repositories.student_repository import StudentRepository
+from db.schema_creator import SchemaCreator
+from db.room_data_access import RoomDataAccess
 from dotenv import load_dotenv
 import os
 
@@ -28,8 +28,8 @@ def main():
     schema = SchemaCreator(db)
     schema.create_schema()
 
-    room_repo = RoomRepository(db)
-    student_repo = StudentRepository(db)
+    room_repo = RoomDataAccess(db)
+    student_repo = StudentDataAccess(db)
 
     loader = DataLoader(room_repo, student_repo)
     loader.load_data(
@@ -41,7 +41,10 @@ def main():
     largest_age_diff = LargestAgeDifferenceQuery(db).run()
     mixed_gender = MixedGenderRoomatesQuery(db).run()
 
-    print(room_count, smallest_avg_age, largest_age_diff, mixed_gender)
+    print(f"Room count: {room_count}")
+    print(f"Smallest average age: {smallest_avg_age}")
+    print(f"Largest age difference: {largest_age_diff}")
+    print(f"Mixed gender roommates present: {mixed_gender}")
 
 
 if __name__ == "__main__":
